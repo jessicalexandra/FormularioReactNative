@@ -1,23 +1,9 @@
-ssscdsdfsadasdcgsacdgasdsfdasfdassssss
-savdghasfgdfsagdfsa
-asdasdas
-asdasdasasd
-asdasdsadsad
-sadbvsabdv
-hagdsh
-savdghasfgdfsagdfsadfs
-useDeferredValuefds
-falsesdf
-sadbvsabdvfds
-FileSystemDirectoryEntryfd
-ssscdsdfsadasdcgsacdgasdsfdasfdassssssdf
-ssscdsdfsadasdcgsacdgasdsfdasfdassssssds
-FileSystemDirectoryEntryf
-DevSettingsfds
-fds
+
+
 
 import { DevSettings, StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput,Button } from 'react-native-paper';
+
 
 // libreria de validaciones
 
@@ -37,12 +23,23 @@ export default function App() {
 
       }
     });
+    const onsubmit=(data)=>{
+      console.log(data);//objeto
+      //desustructrurar el objeto 
+      const{fullname,email,phone,password,age}=data;
+      console.log(fullname)
+      //limpiar el formulario
+      reset();
+    }
   return (
     <View style={styles.container}>
       <Controller
         control={control}
         rules={{
          required: true,
+         maxLength:30,
+         minLength:2,
+         pattern:/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/g
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
@@ -56,8 +53,13 @@ export default function App() {
         )}
         name="fullname"
       />
-      {errors.fullname && <Text>This is required.</Text>}
-    
+      {errors.fullname?.type== 'required' && <Text style={{color:'red'}}>Nombre es obligatorio.</Text>}
+      {errors.fullname?.type== 'maxLength' && <Text style={{color:'red'}}>Nombre debe tener maximo 30 carateres.</Text>}
+      {errors.fullname?.type== 'minLength' && <Text style={{color:'red'}}>Nombre debe tener minimo 2 carateres.</Text>}
+      {errors.fullname?.type== 'pattern' && <Text style={{color:'red'}}>Nombre  permite solo letras.</Text>}
+      <Button  style={{marginTop:20}}icon="send" mode="contained" onPress={handleSubmit(onsubmit)}>
+      Enviar
+      </Button>
     </View>
   );
 }
